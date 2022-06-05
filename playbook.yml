@@ -1,0 +1,16 @@
+---
+- name: manage eks in terraform
+  hosts: all
+  become: true
+
+  community.general.terraform:
+    project_path: "terraform/"
+    state: present
+    force_init: true
+
+  tasks:
+    - name: terminate eks if cluster logging is not enabled
+      community.general.terraform:
+        project_path: "terraform/"
+        state: absent
+      when: ansible_facts['enabled_cluster_log_types'] == ''
